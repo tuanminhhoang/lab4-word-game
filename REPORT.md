@@ -36,5 +36,7 @@
 
 # Reflection
 ## Did AI make you faster? Why or why not?
+AI sometimes overcomplicate the problem make it hard for me to figure out what to do. But it is good for debugging and minor error like typo.
 ## Did you feel in control of the code?
+Yes, because i am the one who have the intial and overall thought about it. I can identify when AI suggestions are not along with my idea.
 ## Would you use AI the same way next time? What would you change?
