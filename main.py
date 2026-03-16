@@ -1,4 +1,5 @@
 import random
+import string
 
 word_list = ["apple","banana","orange","guitar","planet","window","forest","rocket","mother-in-law","ice cream"]
 
@@ -47,6 +48,60 @@ def update_game_state(secret_word: str, guessed_letters: list[str], guess: str, 
 		lives -= 1
 		return guessed_letters, lives, "Wrong"
 				
+def auto_play(guessed_letters: list[str]) -> str:
+	guess = random.choice(string.ascii_lowercase)
+	print(guess)
+	if guess not in guessed_letters:
+		return random.choice(string.ascii_lowercase)
+	
+def human_play(secret_word, guess_letters, lives, mask):
+	while lives > 0 and "_" in mask:
+		guess = input("Your guess: ").lower()
+		guess_letters, lives, ans = update_game_state(secret_word, guess_letters, guess, lives)
+		mask = encrypt(secret_word, guess_letters)
+
+		if ans == "Invalid":
+			print("Invalid syntax!")
+			continue
+		if ans == "Duplicate":
+			print("Already guessed!")
+			continue
+		elif ans == "Wrong":
+			print(f"Incorrect, lives remaining: {lives}")
+		elif ans == "Correct":
+			print(f"Good guess! The word:","".join(mask))
+		elif ans == "Victory":
+			break
+
+	if lives == 0:
+		print(f"Defeated! The word is: {secret_word}")
+	else:
+		print("Good job! You won!")
+
+
+def robot_play(secret_word, guess_letters, lives, mask):
+	while lives > 0 and "_" in mask:
+		guess = auto_play(guess_letters)
+		guess_letters, lives, ans = update_game_state(secret_word, guess_letters, guess, lives)
+		mask = encrypt(secret_word, guess_letters)
+
+		if ans == "Invalid":
+			print("Invalid syntax!")
+			continue
+		if ans == "Duplicate":
+			print("Already guessed!")
+			continue
+		elif ans == "Wrong":
+			print(f"Incorrect, lives remaining: {lives}")
+		elif ans == "Correct":
+			print(f"Good guess! The word:","".join(mask))
+		elif ans == "Victory":
+			break
+
+	if lives == 0:
+		print(f"Defeated! The word is: {secret_word}")
+	else:
+		print("Good job! You won!")
 
 def play():
 	"""Run the interactive game loop until the player quits."""
@@ -57,34 +112,20 @@ def play():
 		lives = 6
 		mask = encrypt(secret_word, guess_letters)
 		print("The word is:", "".join(mask))
-		while lives > 0 and "_" in mask:
-			
-			guess = input("Your guess: ").lower()
-			guess_letters, lives, ans = update_game_state(secret_word, guess_letters, guess, lives)
-			mask = encrypt(secret_word, guess_letters)
+		auto = input("Auto play? (y/n): ").lower()
+		if auto == "n":
+			human_play(secret_word, guess_letters, lives, mask)
+			ask = input("Continue playing (y/n): ").lower()
+			if ask == "n":
+				print("Thanks for playing!")
+				playing = False	
 
-			if ans == "Invalid":
-				print("Invalid syntax!")
-				continue
-			if ans == "Duplicate":
-				print("Already guessed!")
-				continue
-			elif ans == "Wrong":
-				print(f"Incorrect, lives remaining: {lives}")
-			elif ans == "Correct":
-				print(f"Good guess! The word:","".join(mask))
-			elif ans == "Victory":
-				break
-
-		if lives == 0:
-			print(f"Defeated! The word is: {secret_word}")
-		else:
-			print("Good job! You won!")
-
-		ask = input("Continue playing (y/n): ").lower()
-		if ask == "n":
-			print("Thanks for playing!")
-			playing = False	
+		elif auto == "y":
+			robot_play(secret_word, guess_letters, lives, mask)
+			ask = input("Continue playing (y/n): ").lower()
+			if ask == "n":
+				print("Thanks for playing!")
+				playing = False	
 
 if __name__ == "__main__":
 	play()

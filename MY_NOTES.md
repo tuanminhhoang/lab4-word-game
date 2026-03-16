@@ -143,3 +143,5 @@ correct full-word guess not ending game
 incorrect full-word guess not penalized (if your rule says it should)
 Mutable type mismatch bugs (list vs set) causing unexpected behavior.
 Replay prompt logic always failing due boolean condition mistakes.
+
+# Auto play

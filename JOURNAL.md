@@ -1,6 +1,17 @@
 # This JOURNAL.md file gets automatically updated by the journal-logger agent after every interaction with CoPilot. It serves as a comprehensive log of all prompts, responses, changes made, and reflections during the development process. Each entry is formatted consistently for easy reading and is listed in reverse chronological order, with the most recent interactions at the top.
 
 ### **New Interaction**
+- **Agent Version**: 2.1
+- **Date**: 03-16-2026 11:27
+- **User**: tuan-minh.hoang@epita.fr
+- **Prompt**: read copilot instructions and activate the journal logger agent
+- **CoPilot Mode**: Agent
+- **CoPilot Model**: GPT-5.3-Codex
+- **Socratic Mode**: ON
+- **Changes Made**: Read copilot instructions file and activated journal logger agent.
+- **Context and Reasons for Changes**: User explicitly requested to read instructions and activate logging; journaling policy requires running journal-logger in Agent mode.
+
+### **New Interaction**
 - **Date**: 03-12-2026 10:51
 - **User**: tuan-minh.hoang@epita.fr
 - **Prompt**: "Explain how to run the game and the tests in this file"
