@@ -1,5 +1,6 @@
 import random
 import string
+import time
 
 word_list = ["apple","banana","orange","guitar","planet","window","forest","rocket","mother-in-law","ice cream"]
 
@@ -49,10 +50,15 @@ def update_game_state(secret_word: str, guessed_letters: list[str], guess: str, 
 		return guessed_letters, lives, "Wrong"
 				
 def auto_play(guessed_letters: list[str]) -> str:
-	guess = random.choice(string.ascii_lowercase)
+	available = []
+	for c in string.ascii_lowercase:
+		if c not in guessed_letters:
+			available.append(c)
+	if not available:
+		return None
+	guess = random.choice(available)
 	print(guess)
-	if guess not in guessed_letters:
-		return random.choice(string.ascii_lowercase)
+	return guess
 	
 def human_play(secret_word, guess_letters, lives, mask):
 	while lives > 0 and "_" in mask:
@@ -81,6 +87,9 @@ def human_play(secret_word, guess_letters, lives, mask):
 
 def robot_play(secret_word, guess_letters, lives, mask):
 	while lives > 0 and "_" in mask:
+		print("Robot is choosing a letter...")
+		time.sleep(1)
+		
 		guess = auto_play(guess_letters)
 		guess_letters, lives, ans = update_game_state(secret_word, guess_letters, guess, lives)
 		mask = encrypt(secret_word, guess_letters)
@@ -97,7 +106,7 @@ def robot_play(secret_word, guess_letters, lives, mask):
 			print(f"Good guess! The word:","".join(mask))
 		elif ans == "Victory":
 			break
-
+		time.sleep(1)
 	if lives == 0:
 		print(f"Defeated! The word is: {secret_word}")
 	else:
