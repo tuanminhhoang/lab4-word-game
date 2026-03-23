@@ -1,3 +1,10 @@
+"""Simple word guessing game with optional autoplay mode.
+
+The game selects a random secret word and lets either a human player or
+an automated player (robot) guess letters until the word is solved or lives
+run out.
+"""
+
 import random
 import string
 import time
@@ -8,7 +15,7 @@ def choose_word():
 	"""Return a random secret word from the predefined list."""
 	return random.choice(word_list)
 
-def encrypt(secret_word, guess_letters):
+def encrypt(secret_word: str, guess_letters: list[str]) -> str:
 	"""Build the masked display of the secret word.
 
 	Spaces and hyphens are always visible. Letters are revealed only if they
@@ -50,6 +57,11 @@ def update_game_state(secret_word: str, guessed_letters: list[str], guess: str, 
 		return guessed_letters, lives, "Wrong"
 				
 def auto_play(guessed_letters: list[str]) -> str:
+	"""Pick and print a random unguessed lowercase letter.
+
+	Returns the chosen letter. If every lowercase letter has already been
+	guessed, returns None.
+	"""
 	available = []
 	for c in string.ascii_lowercase:
 		if c not in guessed_letters:
@@ -60,7 +72,8 @@ def auto_play(guessed_letters: list[str]) -> str:
 	print(guess)
 	return guess
 	
-def human_play(secret_word, guess_letters, lives, mask):
+def human_play(secret_word: str, guess_letters: list[str], lives: int, mask: str):
+	"""Run one full round where the human enters guesses by keyboard."""
 	while lives > 0 and "_" in mask:
 		guess = input("Your guess: ").lower()
 		guess_letters, lives, ans = update_game_state(secret_word, guess_letters, guess, lives)
@@ -85,7 +98,8 @@ def human_play(secret_word, guess_letters, lives, mask):
 		print("Good job! You won!")
 
 
-def robot_play(secret_word, guess_letters, lives, mask):
+def robot_play(secret_word: str, guess_letters: list[str], lives: int, mask: str):
+	"""Run one full round where guesses are generated automatically."""
 	while lives > 0 and "_" in mask:
 		print("Robot is choosing a letter...")
 		time.sleep(1)
@@ -113,7 +127,11 @@ def robot_play(secret_word, guess_letters, lives, mask):
 		print("Good job! You won!")
 
 def play():
-	"""Run the interactive game loop until the player quits."""
+	"""Run game sessions until the user chooses to stop.
+
+	At the start of each session, the user chooses either human play or
+	autoplay mode.
+	"""
 	playing = True
 	while playing:
 		secret_word = choose_word()
@@ -124,17 +142,13 @@ def play():
 		auto = input("Auto play? (y/n): ").lower()
 		if auto == "n":
 			human_play(secret_word, guess_letters, lives, mask)
-			ask = input("Continue playing (y/n): ").lower()
-			if ask == "n":
-				print("Thanks for playing!")
-				playing = False	
-
 		elif auto == "y":
 			robot_play(secret_word, guess_letters, lives, mask)
-			ask = input("Continue playing (y/n): ").lower()
-			if ask == "n":
-				print("Thanks for playing!")
-				playing = False	
+
+		ask = input("Continue playing (y/n): ").lower()
+		if ask == "n":
+			print("Thanks for playing!")
+			playing = False	
 
 if __name__ == "__main__":
 	play()
